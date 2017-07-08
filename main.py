@@ -5,7 +5,7 @@ tokens = (
     'NEWLINE', 'ASSIGN',
     'SEMICOL', 'MUL', 'DIV',
     'NUMBER', 'COLON', 'LBRACKET', 'RBRACKET',
-    'LBRACE', 'RBRACE')
+    'LBRACE', 'RBRACE', 'EQ', 'NEQ', 'GT', 'LT')
 t_MINUS = r'\-'
 t_LPAR = r'\('
 t_RPAR = r'\)'
@@ -19,6 +19,10 @@ t_LBRACKET = r'\['
 t_RBRACKET = r'\]'
 t_LBRACE = r'\{'
 t_RBRACE = r'\}'
+t_EQ = r'\='
+t_NEQ = r'<>'
+t_LT = r'<'
+t_GT = r'>'
 t_ignore = ' \t'
 
 
@@ -140,6 +144,38 @@ def p_expr3(p):
         p[0] = p[1] - p[3]
     else:
         p[0] = p[1]
+
+
+def p_expr4(p):
+    """expr : expr EQ expr"""
+    if p[1] == p[3]:
+        p[0] = True
+    else:
+        p[0] = False
+
+
+def p_expr5(p):
+    """expr : expr NEQ expr"""
+    if p[1] != p[3]:
+        p[0] = True
+    else:
+        p[0] = False
+
+
+def p_expr6(p):
+    """expr : expr GT expr"""
+    if p[1] > p[3]:
+        p[0] = True
+    else:
+        p[0] = False
+
+
+def p_expr7(p):
+    """expr : expr LT expr"""
+    if p[1] < p[3]:
+        p[0] = True
+    else:
+        p[0] = False
 
 
 def p_term1(p):
