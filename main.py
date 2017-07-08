@@ -81,7 +81,7 @@ def p_stmts(p):
     """
 
 
-def p_stmt(p):
+def p_stmt1(p):
     """stmt : ID LPAR expr RPAR
             | ID ASSIGN ID LPAR RPAR
             | ID ASSIGN expr"""
@@ -110,7 +110,7 @@ def p_stmt2(p):
         print("syntax error: only 'input'")
 
 
-def p_expr2(p):
+def p_expr1(p):
     """expr : term
             | expr LBRACKET NUMBER RBRACKET
             | expr LBRACKET NUMBER COLON RBRACKET
@@ -125,7 +125,7 @@ def p_expr2(p):
         p[0] = p[1][p[3]:p[5]]
 
 
-def p_expr3(p):
+def p_expr2(p):
     """expr : expr PLUS term
             | expr LBRACKET COLON NUMBER RBRACKET"""
     if len(p) == 4:
@@ -134,7 +134,7 @@ def p_expr3(p):
         p[0] = p[1][:p[4]]
 
 
-def p_expr5(p):
+def p_expr3(p):
     """expr : expr MINUS term"""
     if len(p) == 4:
         p[0] = p[1] - p[3]
@@ -142,7 +142,7 @@ def p_expr5(p):
         p[0] = p[1]
 
 
-def p_term(p):
+def p_term1(p):
     """term : term MUL factor
             | factor
     """
@@ -158,7 +158,7 @@ def p_term2(p):
     p[0] = p[1] / p[3]
 
 
-def p_factor0(p):
+def p_factor1(p):
     """factor : primary
                 | PLUS factor
     """
@@ -168,12 +168,12 @@ def p_factor0(p):
         p[0] = p[2]
 
 
-def p_factor1(p):
+def p_factor2(p):
     """factor : MINUS factor"""
     p[0] = -1 * p[2]
 
 
-def p_primary(p):
+def p_primary1(p):
     """primary : STR
             | LPAR expr RPAR
     """
