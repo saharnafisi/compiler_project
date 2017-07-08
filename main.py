@@ -1,11 +1,28 @@
 import ply
-tokens = ('STR', 'ID', 'MINUS', 'PLUS', 'LPAR', 'RPAR', 'NEWLINE', 'ASSIGN')
+tokens = (
+    'STR', 'ID', 'MINUS',
+    'PLUS', 'LPAR', 'RPAR',
+    'NEWLINE', 'ASSIGN',
+    'SEMICOL', 'MUL', 'DIV',
+    'NUMBER','COLON', 'LBRACKET', 'RBRACKET')
 t_MINUS = r'\-'
 t_LPAR = r'\('
 t_RPAR = r'\)'
-t_ASSIGN = r'\='
+t_ASSIGN = r'\=:'
 t_PLUS = r'\+'
+t_SEMICOL = r';'
+t_MUL = r'\*'
+t_DIV = r'/'
+t_COLON = r':'
+t_LBRACKET = r'\['
+t_RBRACKET = r'\]'
 t_ignore = ' \t'
+
+
+def t_NUMBER(t):
+    r'[0-9]+'
+    t.value = int(t.value)
+    return t
 
 
 def t_ID(t):
@@ -49,8 +66,8 @@ symt = {}
 
 def p_stmts(p):
     """
-    stmts : stmt
-            | stmt NEWLINE stmts
+    stmts : stmt SEMICOL
+            | stmt SEMICOL NEWLINE stmts
             |
     """
 
@@ -74,20 +91,55 @@ def p_stmt(p):
         symt[p[1]] = p[3]
 
 
-def p_expr1(p):
-    """expr : expr MINUS factor"""
-    p[0] = p[1].replace(p[3], '')
+def p_stmt2(p):
+    """
+    stmt : ID ASSIGN ID LPAR expr RPAR
+    """
+    if p[3] == 'input':
+        symt[p[1]] = input(p[5])
+    else:
+        print("syntax error: only 'input'")
 
 
 def p_expr2(p):
-    """expr : factor"""
-    p[0] = p[1]
+    """expr : term
+            | expr LBRACKET NUMBER RBRACKET """
+    if len(p)==2:
+        p[0] = p[1]
+    else:
+        p[0] = p[1][p[3]]
 
 
 def p_expr3(p):
-    """expr : expr PLUS factor"""
+    """expr : expr PLUS term"""
     p[0] = p[1] + p[3]
 
+def p_expr5(p):
+    """expr : expr MINUS term"""
+    if len(p)==4:
+        p[0] = p[1] - p[3]
+    else:
+        p[0]=p[1]
+
+
+def p_term(p):
+    """term : term MUL factor
+            | factor
+    """
+    if len(p)==4:
+        p[0] = p[1] * p[3]
+    else:
+        p[0]=p[1]
+
+def p_term2(p):
+    """term : term DIV factor
+    """
+    p[0] = p[1] / p[3]
+
+def p_factor0(p):
+    """factor : NUMBER
+    """
+    p[0] = p[1]
 
 def p_factor(p):
     """factor : STR
