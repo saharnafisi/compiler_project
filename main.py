@@ -88,6 +88,7 @@ def p_newline(p):
     """newline : NEWLINE
                 | """
 
+
 def p_stmts(p):
     """
     stmts : stmt SEMICOL newline stmts
@@ -157,10 +158,7 @@ def p_expr2(p):
 
 def p_expr3(p):
     """expr : expr MINUS term"""
-    if len(p) == 4:
-        p[0] = p[1] - p[3]
-    else:
-        p[0] = p[1]
+    p[0] = p[1] - p[3]
 
 
 def p_expr4(p):
