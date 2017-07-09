@@ -5,7 +5,8 @@ tokens = (
     'NEWLINE', 'ASSIGN',
     'SEMICOL', 'MUL', 'DIV',
     'NUMBER', 'COLON', 'LBRACKET', 'RBRACKET',
-    'LBRACE', 'RBRACE', 'EQ', 'NEQ', 'GT', 'LT')
+    'LBRACE', 'RBRACE', 'MCOMMENT',
+    'EQ', 'NEQ', 'GT', 'LT')
 t_MINUS = r'\-'
 t_LPAR = r'\('
 t_RPAR = r'\)'
@@ -24,6 +25,12 @@ t_NEQ = r'<>'
 t_LT = r'<'
 t_GT = r'>'
 t_ignore = ' \t'
+
+
+def t_MCOMMENT(t):
+    r'\/\*(\*(?!\/)|[^*])*\*\/'
+    t.lexer.lineno += t.value.count("\n")
+    return t
 
 
 def t_NUMBER(t):
@@ -72,17 +79,27 @@ symt = {}
 
 
 def p_start(p):
-    """start : LBRACE stmts RBRACE
+    """start : comment LBRACE newline stmts newline RBRACE comment
             |
     """
 
+
+def p_newline(p):
+    """newline : NEWLINE
+                | """
 
 def p_stmts(p):
     """
-    stmts : stmt SEMICOL
-            | stmt SEMICOL NEWLINE stmts
+    stmts : stmt SEMICOL newline stmts
+            | comment stmts
+            | stmts comment
             |
     """
+
+
+def p_comment(p):
+    """comment : MCOMMENT newline
+                | """
 
 
 def p_stmt1(p):
