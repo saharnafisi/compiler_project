@@ -34,13 +34,13 @@ def t_MCOMMENT(t):
 
 
 def t_NUMBER(t):
-    r'[0-9]+'
-    t.value = int(t.value)
+    r'([0-9]*[.])?[0-9]+'
+    t.value = float(t.value)
     return t
 
 
 def t_ID(t):
-    r'[a-zA-Z]+[a-zA-Z0-9]*'
+    r'[a-zA-Z_]+[a-zA-Z0-9]*'
     return t
 
 
@@ -64,16 +64,6 @@ def t_error(t):
 import ply.lex as lex
 lexer = lex.lex()
 
-
-"""lexer.input(data)
-
-# Tokenize
-while True:
-    tok = lexer.token()
-    if not tok:
-        break      # No more input
-    print(tok)
-"""
 
 symt = {}
 
@@ -140,11 +130,11 @@ def p_expr1(p):
     if len(p) == 2:
         p[0] = p[1]
     elif len(p) == 5:
-        p[0] = p[1][p[3]]
+        p[0] = p[1][int(p[3])]
     elif len(p) == 6:
-        p[0] = p[1][p[3]:]
+        p[0] = p[1][int(p[3]):]
     else:
-        p[0] = p[1][p[3]:p[5]]
+        p[0] = p[1][int(p[3]):int(p[5])]
 
 
 def p_expr2(p):
@@ -153,7 +143,7 @@ def p_expr2(p):
     if len(p) == 4:
         p[0] = p[1] + p[3]
     else:
-        p[0] = p[1][:p[4]]
+        p[0] = p[1][:int(p[4])]
 
 
 def p_expr3(p):
@@ -250,7 +240,8 @@ def p_error(t):
 
 import ply.yacc as yacc
 parser = yacc.yacc()
+file_name = input("Enter file name > ")
 
-with open('test_input1.txt') as input_file:
+with open(file_name) as input_file:
     data = input_file.read()
     parser.parse(data)

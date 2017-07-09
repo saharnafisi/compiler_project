@@ -1,0 +1,5 @@
+{
+    str =: "this a test string";
+    str =: str[5:];
+    print("str[5:]: " + str);
+}

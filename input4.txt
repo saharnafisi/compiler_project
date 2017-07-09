@@ -1,0 +1,8 @@
+{
+    a=:5;
+    b=:7;
+    print(a>b);
+    name1=:"alireza";
+    name2=:"a";
+    print(name1[0]=name2);
+}

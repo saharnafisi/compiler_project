@@ -1,0 +1,6 @@
+{
+    a =: "Enter your first name: ";
+    f_name =: input(a);
+    l_name =: input("Enter your last name: ");
+    print("Your full name is :" + f_name + " " + l_name );
+}

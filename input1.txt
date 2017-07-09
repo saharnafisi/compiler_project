@@ -1,0 +1,10 @@
+/*this 
+is a
+multi line comment */
+{
+    a=:2.5;
+    b=:-4;
+    c=:2;
+    /*this is another comment*/
+    print((a*b)+c);
+}
